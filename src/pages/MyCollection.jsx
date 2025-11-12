@@ -6,8 +6,10 @@ import MovieCard from "../components/MovieCard";
 import { useNavigate } from "react-router";
 
 const MyCollection = () => {
-    const [myMovies, setMyMovies] = useState([]);
-    const navigate = useNavigate()
+  const [myMovies, setMyMovies] = useState([]);
+  const [id, setId] = useState("");
+  const navigate = useNavigate();
+  // console.log(id)
 
   const { isDarkMode, user } = useAuth();
   const axiosSecure = useAxiosSecure();
@@ -20,6 +22,11 @@ const MyCollection = () => {
         // console.log(Boolean(![]));
       });
   }, [axiosSecure, user]);
+
+  useEffect(() => {
+    if (!id) return;
+    setMyMovies((prevMovies) => prevMovies.filter((m) => m._id !== id));
+  }, [id]);
 
   return (
     <div className="px-4 py-8 mx-auto max-w-7xl">
@@ -62,7 +69,12 @@ const MyCollection = () => {
       ) : (
         <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {myMovies.map((movie) => (
-            <MovieCard key={movie._id} movie={movie} />
+            <MovieCard
+              key={movie._id}
+              movie={movie}
+              setId={setId}
+              isEdit={false}
+            />
           ))}
         </div>
       )}

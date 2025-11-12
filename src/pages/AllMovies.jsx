@@ -63,7 +63,10 @@ const AllMovies = () => {
         </h1>
 
         {currentUser && (
-          <button onClick={()=> navigate('/add-movie')} className="flex items-center px-6 py-3 space-x-2 font-medium text-white bg-blue-600 shadow-md cursor-pointer rounded-xl hover:bg-blue-700">
+          <button
+            onClick={() => navigate("/add-movie")}
+            className="flex items-center px-6 py-3 space-x-2 font-medium text-white bg-blue-600 shadow-md cursor-pointer rounded-xl hover:bg-blue-700"
+          >
             <Plus className="w-5 h-5" />
             <span>Add New Movie</span>
           </button>
@@ -168,7 +171,7 @@ const AllMovies = () => {
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {movies.map((movie) => (
-            <MovieCard key={movie._id} movie={movie} />
+            <MovieCard key={movie._id} movie={movie} isEdit={true} />
           ))}
         </div>
       )}

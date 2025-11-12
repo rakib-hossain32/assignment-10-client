@@ -29,7 +29,7 @@ const MovieDetails = () => {
 
   useEffect(() => {
     axiosSecure.get(`/movies/${id}`).then((data) => {
-      console.log(data.data);
+      // console.log(data.data);
       setMovie(data.data);
     });
   }, [axiosSecure, id]);
@@ -195,7 +195,7 @@ const MovieDetails = () => {
                   </button>
 
                   <button
-                    onClick={() => handleMovieDelete()}
+                    onClick={handleMovieDelete}
                     className="flex items-center px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md cursor-pointer rounded-xl hover:bg-red-700"
                   >
                     <Trash2 className="w-5 h-5" />

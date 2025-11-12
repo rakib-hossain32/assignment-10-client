@@ -57,12 +57,23 @@ const EditMovie = ({ isEdit }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axiosSecure.post("/movies", { ...formData, addedBy: user.email });
-      console.log(formData);
-      navigate("/all-movies");
-    } catch (err) {
-      // console.error(err);
-    } finally {
+      await axiosSecure.post("/movies", { ...formData, addedBy: user.email }).then((data) => { 
+        if (data.data.insertedId) {
+          // console.log(data.data);
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your Movie Updated!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate("/all-movies");
+        }
+         
+       })
+      // console.log(formData);
+     
+    }  finally {
       setIsLoading(false);
     }
   };
@@ -71,7 +82,7 @@ const EditMovie = ({ isEdit }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axiosSecure.patch(`/movies/${id}`, formData).then((data) => {
+      await axiosSecure.patch(`/movies/update/${id}`, formData).then((data) => {
         // console.log(data);
         if (data.data.modifiedCount) {
           Swal.fire({
