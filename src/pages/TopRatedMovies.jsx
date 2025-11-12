@@ -5,7 +5,8 @@ import { Link } from "react-router";
 
 const TopRatedMovies = () => {
   const { movies, isDarkMode } = useAuth();
-    const [topRatedMovies, setTopRatedMovies] = useState([]);
+  const [topRatedMovies, setTopRatedMovies] = useState([]);
+  // console.log(movies)
     
     // const a = movies.sort((a, b) => a.rating - b.rating)
     // console.log(a)

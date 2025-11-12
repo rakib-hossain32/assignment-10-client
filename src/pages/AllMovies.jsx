@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import MovieCard from "../components/MovieCard";
 import { Plus, Film } from "lucide-react";
-import { Atom } from "react-loading-indicators";
+
 import { useNavigate } from "react-router";
 
 const AllMovies = () => {
@@ -26,13 +26,15 @@ const AllMovies = () => {
     "Crime",
   ];
 
-  // ✅ Fetch filtered movies
+  // console.log(movies)
+
+  // Fetch filtered movies
   const fetchFilteredMovies = async () => {
     setIsLoading(true);
     try {
       const genres = filterGenres.map((g) => g.toLowerCase()).join(",");
       const res = await fetch(
-        `http://localhost:3000/movies?genres=${genres}&minRating=${ratingRange[0]}&maxRating=${ratingRange[1]}`
+        `http://localhost:3000/movies/filter?genres=${genres}&minRating=${ratingRange[0]}&maxRating=${ratingRange[1]}`
       );
       const data = await res.json();
       setMovies(data);

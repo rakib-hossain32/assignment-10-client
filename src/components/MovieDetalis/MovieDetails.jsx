@@ -1,36 +1,71 @@
-import { ChevronLeft, Clock, Edit, Film, Globe, Heart, Star, Trash2 } from "lucide-react";
+import {
+  ChevronLeft,
+  Clock,
+  Edit,
+  Film,
+  Globe,
+  Heart,
+  Star,
+  Trash2,
+} from "lucide-react";
 import useAuth from "../../hooks/useAuth";
 import { useEffect, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useNavigate, useParams } from "react-router";
 import DetailItem from "./DetailItem";
 import { Atom } from "react-loading-indicators";
+import Swal from "sweetalert2";
 
 // Movie Details Page
 const MovieDetails = () => {
   //   if (!movie) return <div>Movie not found</div>;
-  const { id } = useParams()
-  const navigate = useNavigate()
+  const { id } = useParams();
+  const navigate = useNavigate();
   // console.log(id)
   const { isDarkMode, user } = useAuth();
   const axiosSecure = useAxiosSecure();
-  const [movie, setMovie] = useState(null)
-  const [watchlist, setWatchlist] = useState(false)
-  
-  
-  useEffect(() => { 
-    axiosSecure.get(`/movies/${id}`).then(data => {
-      console.log(data.data)
-      setMovie(data.data)
-    })
-  }, [axiosSecure, id])
-  
-  console.log(
-    Boolean(movie)
-  )
+  const [movie, setMovie] = useState(null);
+  const [watchlist, setWatchlist] = useState(false);
 
-//   const isOwner = currentUser?.email === movie.addedBy;
-//   const inWatchlist = watchlist.includes(movie.id);
+  useEffect(() => {
+    axiosSecure.get(`/movies/${id}`).then((data) => {
+      console.log(data.data);
+      setMovie(data.data);
+    });
+  }, [axiosSecure, id]);
+
+  const handleMovieDelete = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/movies/${id}`).then((data) => {
+          // console.log();
+          if (data.data.deletedCount) {
+            // const remaining =
+            navigate("/all-movies");
+          }
+        });
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your movie has been deleted.",
+          icon: "success",
+        });
+        // console.log('first')
+      }
+    });
+    // console.log('first')
+  };
+
+  //   const isOwner = currentUser?.email === movie.addedBy;
+  //   const inWatchlist = watchlist.includes(movie.id);
 
   return movie ? (
     <div className="px-4 py-8 mx-auto max-w-7xl">
@@ -95,7 +130,7 @@ const MovieDetails = () => {
                 }`}
               >
                 <Clock className="w-5 h-5 mr-2" />
-                {movie?.runtime} min
+                {movie?.duration} min
               </span>
               <span
                 className={`flex items-center ${
@@ -133,7 +168,7 @@ const MovieDetails = () => {
             <div className="flex pt-4 space-x-4">
               <button
                 onClick={() => setWatchlist(true)}
-                className={`flex-1 flex justify-center items-center space-x-2 px-6 py-3 rounded-xl shadow-md font-medium transition ${
+                className={`flex-1 flex justify-center items-center space-x-2 px-6 py-3 rounded-xl shadow-md font-medium transition cursor-pointer ${
                   watchlist
                     ? "bg-red-600 text-white hover:bg-red-700"
                     : "bg-gray-200 text-gray-800 hover:bg-gray-300"
@@ -153,15 +188,15 @@ const MovieDetails = () => {
                 <>
                   <button
                     onClick={() => navigate(`/edit-movie/${movie._id}`)}
-                    className="flex items-center px-6 py-3 space-x-2 text-white transition bg-blue-600 shadow-md rounded-xl hover:bg-blue-700"
+                    className="flex items-center px-6 py-3 space-x-2 text-white transition bg-blue-600 shadow-md cursor-pointer rounded-xl hover:bg-blue-700"
                   >
                     <Edit className="w-5 h-5" />
                     <span>Edit</span>
                   </button>
 
                   <button
-                    onClick={() => ""}
-                    className="flex items-center px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md rounded-xl hover:bg-red-700"
+                    onClick={() => handleMovieDelete()}
+                    className="flex items-center px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md cursor-pointer rounded-xl hover:bg-red-700"
                   >
                     <Trash2 className="w-5 h-5" />
                     <span>Delete</span>
@@ -180,4 +215,4 @@ const MovieDetails = () => {
   );
 };
 
-export default MovieDetails
+export default MovieDetails;

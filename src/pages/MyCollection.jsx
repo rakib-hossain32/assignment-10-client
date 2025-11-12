@@ -53,7 +53,7 @@ const MyCollection = () => {
             You haven't added any movies yet.
           </p>
           <button
-            //   onClick={() => setCurrentPage("add-movie")}
+            onClick={() => navigate("/add-movie")}
             className="px-6 py-3 mt-6 font-medium text-white bg-blue-600 shadow-md rounded-xl hover:bg-blue-700"
           >
             Add Your First Movie

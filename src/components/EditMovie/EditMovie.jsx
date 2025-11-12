@@ -5,6 +5,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import FormInput from "./FormInput";
 import FormSelect from "./FormSelect";
 import { Plus, Edit } from "lucide-react";
+import Swal from "sweetalert2";
 
 const GENRES = ["Action", "Comedy", "Drama", "Horror", "Sci-Fi"];
 
@@ -25,8 +26,11 @@ const EditMovie = ({ isEdit }) => {
     poster: "",
     language: "",
     country: "",
+    createAt: new Date(),
   });
   const [isLoading, setIsLoading] = useState(false);
+
+  // console.log(id);
 
   useEffect(() => {
     if (isEdit && id) {
@@ -39,12 +43,11 @@ const EditMovie = ({ isEdit }) => {
           director: movie.director || "",
           cast: movie.cast || "",
           rating: movie.rating || "",
-          duration: movie.runtime || "",
+          duration: movie.duration || "",
           description: movie.plotSummary || movie.description || "",
           poster: movie.poster || "",
           language: movie.language || "",
           country: movie.country || "",
-          createAt: new Date(),
         });
       }
     }
@@ -55,9 +58,10 @@ const EditMovie = ({ isEdit }) => {
     setIsLoading(true);
     try {
       await axiosSecure.post("/movies", { ...formData, addedBy: user.email });
+      console.log(formData);
       navigate("/all-movies");
     } catch (err) {
-      console.error(err);
+      // console.error(err);
     } finally {
       setIsLoading(false);
     }
@@ -67,14 +71,26 @@ const EditMovie = ({ isEdit }) => {
     e.preventDefault();
     setIsLoading(true);
     try {
-      await axiosSecure.patch(`/movies/${id}`, formData);
-      navigate(`/movies/${id}`);
-    } catch (err) {
-      console.error(err);
+      await axiosSecure.patch(`/movies/${id}`, formData).then((data) => {
+        // console.log(data);
+        if (data.data.modifiedCount) {
+          Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: "Your Movie Updated!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          navigate(`/movie-details/${id}`);
+        }
+      });
+      // console.log()
     } finally {
       setIsLoading(false);
     }
   };
+
+  // console.log(formData);
 
   return (
     <div className="max-w-3xl px-4 py-8 mx-auto">
@@ -91,7 +107,7 @@ const EditMovie = ({ isEdit }) => {
         className={`p-8 rounded-xl space-y-6 ${
           isDarkMode
             ? "bg-gray-800 border border-gray-700"
-            : "bg-white shadow-xl border"
+            : "bg-white shadow-xl border text-gray-700 border-gray-300"
         }`}
       >
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -212,7 +228,7 @@ const EditMovie = ({ isEdit }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="flex items-center justify-center flex-1 px-6 py-3 space-x-2 font-medium text-white transition bg-blue-600 shadow-md rounded-xl hover:bg-blue-700 disabled:opacity-50"
+            className="flex items-center justify-center flex-1 px-6 py-3 space-x-2 font-medium text-white transition bg-blue-600 shadow-md cursor-pointer rounded-xl hover:bg-blue-700 disabled:opacity-50"
           >
             {isLoading ? (
               <div className="w-5 h-5 border-b-2 border-white rounded-full animate-spin"></div>
@@ -237,7 +253,7 @@ const EditMovie = ({ isEdit }) => {
             onClick={() =>
               navigate(isEdit ? `/movie-details/${id}` : "/all-movies")
             }
-            className={`px-6 py-3 rounded-xl font-medium transition ${
+            className={`px-6 py-3 rounded-xl font-medium transition cursor-pointer ${
               isDarkMode
                 ? "bg-gray-700 text-white hover:bg-gray-600"
                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
