@@ -34,7 +34,7 @@ const Watchlist = () => {
     const commonMovies = movies.filter((movie) =>
       watchIn.some((fav) => fav.id === movie._id)
     );
-    console.log(commonMovies);
+    // console.log(commonMovies);
     setWatchlists(commonMovies);
   }, [movies, watchIn]);
 

@@ -11,7 +11,7 @@ const Statistics = () => {
 
   useEffect(() => {
     axiosSecure.get("/users").then((data) => {
-      console.log(data.data);
+      // console.log(data.data);
       setUsersCollection(data.data)
     });
   }, [axiosSecure]);

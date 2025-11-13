@@ -69,7 +69,7 @@ const MovieDetails = () => {
     // console.log('first', id)
     const movieId = { title: movie?.title, id: movie?._id, email: user?.email };
     axiosSecure.post("/watchlist-create", movieId).then((data) => {
-      console.log(data.data);
+      // console.log(data.data);
       if (data.data.insertedId) {
         Swal.fire({
           title: "Add to Watchlist",
@@ -85,17 +85,17 @@ const MovieDetails = () => {
   // all watchlist get
     useEffect(() => {
       axiosSecure.get("/watchlist").then((data) => {
-        console.log(data.data);
+        // console.log(data.data);
         setWatchlist(data.data);
       });
     }, [axiosSecure]);
 
   useEffect(() => {
-    console.log(watchlist)
+    // console.log(watchlist)
     const a = watchlist.find((w) => w?.id === movie?._id);
     // console.log(a);
     if (a) {
-      console.log('check',Boolean(a))
+      // console.log('check',Boolean(a))
       setInWatchlist(true);
     }
   }, [watchlist, movie]);
@@ -106,7 +106,7 @@ const MovieDetails = () => {
   //   const inWatchlist = watchlist.includes(movie.id);
   // console.log(movie)
 
-  console.log(inWatchlist)
+  // console.log(inWatchlist)
 
   return movie ? (
     <div className="px-4 py-8 mx-auto max-w-7xl">

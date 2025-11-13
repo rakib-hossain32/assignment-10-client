@@ -9,7 +9,7 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   // console.log(a)
 
-  console.log(loading)
+  // console.log(loading)
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen ">

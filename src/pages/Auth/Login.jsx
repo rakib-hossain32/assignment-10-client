@@ -8,7 +8,7 @@ const Login = () => {
   const { isDarkMode, signInUser, loginGoogle } = useAuth();
   const navigate = useNavigate();
   const location = useLocation()
-  console.log(location)
+  // console.log(location)
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -32,10 +32,10 @@ const Login = () => {
     loginGoogle()
       .then((result) => {
         navigate(location.state || '/');
-        console.log(result.user);
+        // console.log(result.user);
       })
       .catch((error) => {
-        console.log(error.message);
+        // console.log(error.message);
         toast.error(error.message);
       });
   };

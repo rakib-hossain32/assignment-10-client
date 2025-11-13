@@ -12,7 +12,7 @@ const RootLayout = () => {
   const { isDarkMode } = useAuth();
 
   const loading = useNavigation();
-  console.log(loading.state);
+  // console.log(loading.state);
 
   return (
     <div

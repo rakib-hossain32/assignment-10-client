@@ -22,21 +22,21 @@ const Register = () => {
       return;
     }
 
-    console.log({ name, email, password, photoURL });
+    // console.log({ name, email, password, photoURL });
     createUser(email, password)
       .then((result) => {
         updateUser(name, photoURL)
           .then(() => {
             toast.success('successfully create account')
             navigate("/");
-            console.log(result.user);
+            // console.log(result.user);
           })
           .catch((error) => {
-            console.log(error.message);
+            // console.log(error.message);
           });
       })
       .catch((error) => {
-        console.log(error.message);
+        // console.log(error.message);
       });
   };
 

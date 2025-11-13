@@ -41,11 +41,11 @@ export default function Navigation() {
   //   const currentPath = location.pathname;
 
   const handleLogout = () => {
-    console.log("first");
+    // console.log("first");
     signOutUser()
       .then(() => setShowDropdown(false))
       .catch((error) => {
-        console.log(error.message);
+        // console.log(error.message);
       });
   };
 
