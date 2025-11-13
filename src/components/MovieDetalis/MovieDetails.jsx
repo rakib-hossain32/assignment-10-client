@@ -22,9 +22,10 @@ const MovieDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   // console.log(id)
-  const { isDarkMode, user, watchlist } = useAuth();
+  const { isDarkMode, user,  } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [movie, setMovie] = useState(null);
+  const [watchlist, setWatchlist] = useState([]);
   const [inWatchlist, setInWatchlist] = useState(false);
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const MovieDetails = () => {
 
   const handleAddWatchlist = () => {
     // console.log('first', id)
-    const movieId = { title: movie?.title, id: movie?._id };
+    const movieId = { title: movie?.title, id: movie?._id, email: user?.email };
     axiosSecure.post("/watchlist-create", movieId).then((data) => {
       console.log(data.data);
       if (data.data.insertedId) {
@@ -80,19 +81,32 @@ const MovieDetails = () => {
     });
   };
 
+
+  // all watchlist get
+    useEffect(() => {
+      axiosSecure.get("/watchlist").then((data) => {
+        console.log(data.data);
+        setWatchlist(data.data);
+      });
+    }, [axiosSecure]);
+
   useEffect(() => {
+    console.log(watchlist)
     const a = watchlist.find((w) => w?.id === movie?._id);
-    console.log(a);
+    // console.log(a);
     if (a) {
+      console.log('check',Boolean(a))
       setInWatchlist(true);
     }
-  }, [watchlist]);
+  }, [watchlist, movie]);
 
-  console.log(watchlist);
+  // console.log(watchlist);
 
   //   const isOwner = currentUser?.email === movie.addedBy;
   //   const inWatchlist = watchlist.includes(movie.id);
   // console.log(movie)
+
+  console.log(inWatchlist)
 
   return movie ? (
     <div className="px-4 py-8 mx-auto max-w-7xl">
@@ -196,10 +210,10 @@ const MovieDetails = () => {
               <button
                 disabled={inWatchlist}
                 onClick={() => handleAddWatchlist()}
-                className={`flex-1 flex justify-center items-center space-x-2 px-6 py-3 rounded-xl shadow-md font-medium transition cursor-pointer ${
+                className={`flex-1 flex justify-center items-center space-x-2 px-6 py-3 rounded-xl shadow-md font-medium transition  ${
                   inWatchlist
-                    ? " text-white bg-red-700  "
-                    : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+                    ? " text-white bg-red-700 cursor-not-allowed "
+                    : "bg-gray-200 text-gray-800 hover:bg-gray-300 cursor-pointer"
                 } ${
                   isDarkMode && !inWatchlist
                     ? "bg-gray-700 text-white hover:bg-gray-600"

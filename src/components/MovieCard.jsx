@@ -5,7 +5,7 @@ import { NavLink,  } from "react-router";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 
-const MovieCard = ({ movie, isEdit, setId }) => {
+const MovieCard = ({ movie, isEdit, setId, isWatchList, setWatchId }) => {
   const { isDarkMode } = useAuth();
   const axiosSecure = useAxiosSecure();
 
@@ -15,7 +15,7 @@ const MovieCard = ({ movie, isEdit, setId }) => {
 
   const handleMovieDelete = (id) => {
     // console.log(id)
-    
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -48,6 +48,40 @@ const MovieCard = ({ movie, isEdit, setId }) => {
     // console.log('first')
   };
 
+  const handleWatchlistDelete = (id) => {
+    // console.log("first", id);
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/watchlist/${id}`).then((data) => {
+          console.log(data.data);
+          if (data.data.deletedCount) {
+            setWatchId(id)
+            // setId(id);
+            // console.log(id)
+            // const remaining =
+            // const remaining =
+            // navigate("/my-collection");
+          }
+        });
+
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your movie has been deleted.",
+          icon: "success",
+        });
+        // console.log('first')
+      }
+    });
+  };
+
   return (
     <div>
       <div
@@ -68,20 +102,14 @@ const MovieCard = ({ movie, isEdit, setId }) => {
                 "https://placehold.co/400x600/4f46e5/ffffff?text=Poster+Not+Found";
             }}
           />
+
           <button
-            onClick={(e) => {
-              e.stopPropagation();
-              //   toggleWatchlist(movie.id);
-            }}
-            className="absolute p-2 text-white transition transform rounded-full top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110"
+            onClick={() => handleWatchlistDelete(movie._id)}
+            className="absolute p-2 text-white transition transform rounded-full cursor-pointer top-2 right-2 bg-black/60 hover:bg-black/80 hover:scale-110"
           >
             <Heart
-              className={`w-5 h-5 `}
-              //   ${
-              // watchlist.includes(movie.id)
-              //       ? "fill-red-500 text-red-500"
-              //       : "text-white"
-              //   }
+              className={`w-5 h-5 
+                  ${isWatchList ? "fill-red-500 text-red-500" : "text-white"}`}
             />
           </button>
         </div>
@@ -131,6 +159,13 @@ const MovieCard = ({ movie, isEdit, setId }) => {
             >
               View Details
             </NavLink>
+          ) : isWatchList ? (
+            <button
+              onClick={() => handleWatchlistDelete(movie._id)}
+              className="flex items-center justify-center w-full px-6 py-3 space-x-2 text-white transition bg-red-600 shadow-md cursor-pointer rounded-xl hover:bg-red-700"
+            >
+              Remove Watchlist
+            </button>
           ) : (
             <button
               onClick={() => handleMovieDelete(movie._id)}

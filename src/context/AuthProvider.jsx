@@ -17,7 +17,7 @@ const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [watchlist, setWatchlist] = useState([]);
+  
   const axiosSecure = useAxiosSecure();
 
   const [movies, setMovies] = useState([]);
@@ -70,13 +70,7 @@ const AuthProvider = ({ children }) => {
     });
   }, [axiosSecure]);
 
-  // all watchlist get
-  useEffect(() => {
-    axiosSecure.get("/watchlist").then((data) => {
-      console.log(data.data);
-      setWatchlist(data.data);
-    });
-  }, [axiosSecure]);
+  
 
   const [isDarkMode, setIsDarkMode] = useState(
     () => localStorage.getItem("theme") === "dark"
@@ -99,7 +93,7 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     user,
     movies,
-    watchlist,
+  
     createUser,
     signInUser,
     loginGoogle,

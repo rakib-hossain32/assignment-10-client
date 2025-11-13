@@ -40,8 +40,9 @@ export const router = createBrowserRouter([
         element: <EditMovie isEdit={false} />,
       },
       {
-        path: '/watchlist',
-        element: <Watchlist/>
+        path: "/watchlist",
+        element: <Watchlist />,
+        loader: () => fetch("http://localhost:3000/watchlist"),
       },
       {
         path: "/login",
