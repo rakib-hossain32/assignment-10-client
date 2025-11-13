@@ -37,7 +37,7 @@ const RecentlyAdded = () => {
       </div>
       <div className="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-4">
         {recentlyAdded.slice(0, 6).map((movie) => (
-          <MovieCard key={movie._id} movie={movie} />
+          <MovieCard key={movie._id} movie={movie} isEdit={true} />
         ))}
       </div>
     </div>

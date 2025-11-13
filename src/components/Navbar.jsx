@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Star, Clock, Play, ChevronLeft, ChevronRight } from "lucide-react";
-import useAxiosSecure from "../hooks/useAxiosSecure";
+
 import { useNavigate } from "react-router";
 import useAuth from "../hooks/useAuth";
 
 export default function Navbar() {
   const [carouselIndex, setCarouselIndex] = useState(0);
-
 
   const { movies } = useAuth();
 
@@ -60,6 +59,13 @@ export default function Navbar() {
     else if (diff < -threshold)
       setCarouselIndex((prev) => (prev - 1 + visibleSlides) % visibleSlides);
   };
+  if (!movies || movies.length === 0) {
+    return (
+      <div className="h-[400px] sm:h-[450px] md:h-[550px] flex items-center justify-center text-gray-400 bg-black/5">
+        Loading movies...
+      </div>
+    );
+  }
 
   return (
     <div

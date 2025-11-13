@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink, useLocation, useNavigate } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import {
   Film,
   Home,
@@ -42,6 +42,7 @@ export default function Navigation() {
         console.log(error.message);
       });
   };
+  
 
   return (
     <nav

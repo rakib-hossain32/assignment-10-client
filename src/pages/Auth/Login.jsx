@@ -12,10 +12,10 @@ const Login = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
-    console.log({ email, password });
+    // console.log({ email, password });
     signInUser(email, password)
-      .then((result) => {
-        console.log(result);
+      .then(() => {
+        // console.log(result);
         navigate("/");
       })
       .catch((error) => {
@@ -24,7 +24,7 @@ const Login = () => {
   };
 
   const handleGoogleLogin = () => {
-    console.log("first");
+    // console.log("first");
     loginGoogle()
       .then((result) => {
         navigate("/");

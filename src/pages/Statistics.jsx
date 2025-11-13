@@ -1,15 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import StatCard from "../components/StatCard";
 import { Star, Film, Users, Calendar } from "lucide-react";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const Statistics = () => {
+  const { movies, isDarkMode } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const [usersCollection, setUsersCollection] = useState([])
 
-  const { movies, isDarkMode ,user } = useAuth();
+  useEffect(() => {
+    axiosSecure.get("/users").then((data) => {
+      console.log(data.data);
+      setUsersCollection(data.data)
+    });
+  }, [axiosSecure]);
   // console.log(movies)
 
   // const {} = movies || {}
-  
+
   return (
     <div>
       {/* Statistics */}
@@ -40,7 +49,7 @@ const Statistics = () => {
           />
           <StatCard
             icon={Users}
-            value={"totalUsers"}
+            value={usersCollection.length}
             label="Active Users"
             color="purple"
           />

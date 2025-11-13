@@ -96,7 +96,7 @@ const MovieCard = ({ movie, isEdit, setId }) => {
             </h3>
             <p
               className={`   truncate bg-gray-100 px-2 py-1 rounded-full ${
-                isDarkMode ? "text-white" : "text-gray-900"
+                isDarkMode ? "text-white bg-gray-100/10" : "text-gray-900"
               }`}
             >
               {movie.year}

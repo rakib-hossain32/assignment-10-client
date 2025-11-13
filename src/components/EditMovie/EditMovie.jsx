@@ -21,7 +21,7 @@ const EditMovie = ({ isEdit }) => {
     director: "",
     cast: "",
     rating: "",
-    duration: "",
+    runtime: "",
     description: "",
     poster: "",
     language: "",
@@ -43,7 +43,7 @@ const EditMovie = ({ isEdit }) => {
           director: movie.director || "",
           cast: movie.cast || "",
           rating: movie.rating || "",
-          duration: movie.duration || "",
+          runtime: movie.runtime || "",
           description: movie.plotSummary || movie.description || "",
           poster: movie.poster || "",
           language: movie.language || "",
@@ -169,7 +169,7 @@ const EditMovie = ({ isEdit }) => {
           />
           <FormInput
             label="Duration (min)"
-            name="duration"
+            name="runtime"
             type="number"
             min="1"
             required

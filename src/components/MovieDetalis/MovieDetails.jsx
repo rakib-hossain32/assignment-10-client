@@ -22,10 +22,10 @@ const MovieDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   // console.log(id)
-  const { isDarkMode, user } = useAuth();
+  const { isDarkMode, user, watchlist } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [movie, setMovie] = useState(null);
-  const [watchlist, setWatchlist] = useState(false);
+  const [inWatchlist, setInWatchlist] = useState(false);
 
   useEffect(() => {
     axiosSecure.get(`/movies/${id}`).then((data) => {
@@ -64,8 +64,35 @@ const MovieDetails = () => {
     // console.log('first')
   };
 
+  const handleAddWatchlist = () => {
+    // console.log('first', id)
+    const movieId = { title: movie?.title, id: movie?._id };
+    axiosSecure.post("/watchlist-create", movieId).then((data) => {
+      console.log(data.data);
+      if (data.data.insertedId) {
+        Swal.fire({
+          title: "Add to Watchlist",
+          text: "The movie has been added to your watchlist.",
+          icon: "success",
+        });
+        setInWatchlist(true);
+      }
+    });
+  };
+
+  useEffect(() => {
+    const a = watchlist.find((w) => w?.id === movie?._id);
+    console.log(a);
+    if (a) {
+      setInWatchlist(true);
+    }
+  }, [watchlist]);
+
+  console.log(watchlist);
+
   //   const isOwner = currentUser?.email === movie.addedBy;
   //   const inWatchlist = watchlist.includes(movie.id);
+  // console.log(movie)
 
   return movie ? (
     <div className="px-4 py-8 mx-auto max-w-7xl">
@@ -130,7 +157,7 @@ const MovieDetails = () => {
                 }`}
               >
                 <Clock className="w-5 h-5 mr-2" />
-                {movie?.duration} min
+                {movie?.runtime} min
               </span>
               <span
                 className={`flex items-center ${
@@ -167,20 +194,21 @@ const MovieDetails = () => {
 
             <div className="flex pt-4 space-x-4">
               <button
-                onClick={() => setWatchlist(true)}
+                disabled={inWatchlist}
+                onClick={() => handleAddWatchlist()}
                 className={`flex-1 flex justify-center items-center space-x-2 px-6 py-3 rounded-xl shadow-md font-medium transition cursor-pointer ${
-                  watchlist
-                    ? "bg-red-600 text-white hover:bg-red-700"
+                  inWatchlist
+                    ? " text-white bg-red-700  "
                     : "bg-gray-200 text-gray-800 hover:bg-gray-300"
                 } ${
-                  isDarkMode && !watchlist
+                  isDarkMode && !inWatchlist
                     ? "bg-gray-700 text-white hover:bg-gray-600"
                     : ""
                 }`}
               >
                 <Heart className={`w-5 h-5 `} />
                 <span>
-                  {watchlist ? "Remove from Watchlist" : "Add to Watchlist"}
+                  {inWatchlist ? "Remove from Watchlist" : "Add to Watchlist"}
                 </span>
               </button>
 

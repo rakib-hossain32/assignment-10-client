@@ -17,6 +17,10 @@ const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [watchlist, setWatchlist] = useState([]);
+  const axiosSecure = useAxiosSecure();
+
+  const [movies, setMovies] = useState([]);
 
   const createUser = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -44,17 +48,33 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+
+      if (currentUser) {
+        const loggedUser = {
+          email: currentUser.email,
+          displayName: currentUser.displayName,
+        };
+
+        axiosSecure.post("/users-create", loggedUser).then(() => {
+          // console.log(data.data)
+        });
+      }
     });
     return () => unsubscribe();
-  }, []);
+  }, [axiosSecure]);
 
-  const axiosSecure = useAxiosSecure();
-
-  const [movies, setMovies] = useState([]);
-
+  // all movies get
   useEffect(() => {
     axiosSecure.get("/movies").then((data) => {
       setMovies(data.data);
+    });
+  }, [axiosSecure]);
+
+  // all watchlist get
+  useEffect(() => {
+    axiosSecure.get("/watchlist").then((data) => {
+      console.log(data.data);
+      setWatchlist(data.data);
     });
   }, [axiosSecure]);
 
@@ -79,6 +99,7 @@ const AuthProvider = ({ children }) => {
   const authInfo = {
     user,
     movies,
+    watchlist,
     createUser,
     signInUser,
     loginGoogle,
